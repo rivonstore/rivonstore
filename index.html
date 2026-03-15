@@ -1,0 +1,120 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>RivonStore | Digital Products</title>  
+    <link rel="stylesheet" href="style.css">  
+</head>  
+<body>  
+  
+    <!-- Loading Animation -->  
+    <div id="loader" class="loader-overlay">  
+        <div class="spinner"></div>  
+    </div>  
+  
+    <!-- Navigation Bar -->  
+    <nav class="navbar">  
+        <div class="nav-container">  
+            <div class="logo">RivonStore</div>  
+            <div class="search-container">  
+                <input type="text" id="search-input" placeholder="Search products...">  
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>  
+            </div>  
+            <button id="admin-btn" class="btn-outline">Admin Panel</button>  
+        </div>  
+    </nav>  
+  
+    <!-- Hero Section -->  
+    <header class="hero">  
+        <div class="hero-content">  
+            <h1>Premium Digital Assets</h1>  
+            <p>Elevate your digital life with our curated sticker packs, photos, and high-res wallpapers.</p>  
+            <button id="explore-btn" class="btn-primary">Explore Products</button>  
+        </div>  
+    </header>  
+  
+    <!-- Product Grid Section -->  
+    <main class="main-content">  
+        <div class="section-header">  
+            <h2>Trending Products</h2>  
+        </div>  
+        <div id="product-grid" class="product-grid">  
+            <!-- Products will be injected here via JavaScript -->  
+        </div>  
+    </main>  
+  
+    <!-- Product View & Buy Modal -->  
+    <div id="buy-modal" class="modal-overlay">  
+        <div class="modal-content buy-modal-content">  
+            <span class="close-btn" onclick="closeModal('buy-modal')">&times;</span>  
+            <div class="modal-grid">  
+                <div class="modal-image-container">  
+                    <img id="modal-img" src="" alt="Product">  
+                </div>  
+                <div class="modal-details">  
+                    <h2 id="modal-title">Product Title</h2>  
+                    <h3 id="modal-price" class="price-tag">₹0</h3>  
+                    <p id="modal-desc" class="desc-text">Product description goes here.</p>  
+                      
+                    <div class="upi-instructions">  
+                        <h4>Payment Instructions</h4>  
+                        <p>1. Scan the QR code or send payment to UPI ID:</p>  
+                        <div class="upi-id-box">yourname@upi</div>  
+                        <p>2. Amount to pay: <strong id="modal-pay-amount">₹0</strong></p>  
+                        <div class="qr-box">  
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=yourname@upi" alt="UPI QR Code">  
+                        </div>  
+                    </div>  
+  
+                    <div class="form-container">  
+                        <h4>Submit Payment Screenshot</h4>  
+                        <form action="https://formspree.io/f/mvoeqkpj" method="POST" enctype="multipart/form-data">  
+                            <input type="text" name="Name" placeholder="Your Full Name" required>  
+                            <input type="email" name="Email" placeholder="Your Email Address" required>  
+                            <input type="text" id="form-product-name" name="Product_Name" readonly required>  
+                            <label for="screenshot">Upload Payment Screenshot:</label>  
+                            <input type="file" id="screenshot" name="Screenshot" accept="image/*" required>  
+                            <button type="submit" class="btn-primary full-width">Submit Payment & Get Product</button>  
+                        </form>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+  
+    <!-- Admin Panel Modal -->  
+    <div id="admin-modal" class="modal-overlay">  
+        <div class="modal-content admin-modal-content">  
+            <span class="close-btn" onclick="closeModal('admin-modal')">&times;</span>  
+            <h2>Admin Panel</h2>  
+              
+            <div class="admin-tabs">  
+                <div class="admin-form-container">  
+                    <h3>Add New Product</h3>  
+                    <form id="add-product-form">  
+                        <input type="text" id="add-title" placeholder="Product Title" required>  
+                        <input type="number" id="add-price" placeholder="Product Price (₹)" required>  
+                        <input type="url" id="add-thumbnail" placeholder="Thumbnail Image URL (Cloudinary)" required>  
+                        <input type="url" id="add-file" placeholder="Product File Download URL" required>  
+                        <textarea id="add-desc" rows="3" placeholder="Product Description" required></textarea>  
+                        <button type="submit" class="btn-primary">Add Product</button>  
+                    </form>  
+                </div>  
+                  
+                <div class="admin-list-container">  
+                    <h3>Manage Products</h3>  
+                    <div id="admin-product-list" class="admin-product-list">  
+                        <!-- Admin products injected here -->  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+  
+    <!-- Toast Notifications Container -->  
+    <div id="toast-container" class="toast-container"></div>  
+  
+    <script src="script.js"></script>  
+</body>  
+</html>  
