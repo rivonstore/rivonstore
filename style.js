@@ -196,3 +196,105 @@ window.addEventListener('load', () => {
     // Initial Render  
     renderProducts(products);  
 });
+// Open Product Buy Modal
+function openProductModal(product) {
+    document.getElementById('modal-img').src = product.thumbnail;
+        document.getElementById('modal-title').innerText = product.title;
+            document.getElementById('modal-price').innerText = `₹${product.price}`;
+                document.getElementById('modal-desc').innerText = product.description;
+                    document.getElementById('modal-pay-amount').innerText = `₹${product.price}`;
+                        document.getElementById('form-product-name').value = product.title;
+
+                            openModal('buy-modal');
+                            }
+
+                            // Search
+                            searchInput.addEventListener('input', (e) => {
+                                const term = e.target.value.toLowerCase();
+                                    const filtered = products.filter(p =>
+                                            p.title.toLowerCase().includes(term)
+                                                );
+                                                    renderProducts(filtered);
+                                                    });
+
+                                                    // Explore button
+                                                    exploreBtn.addEventListener('click', () => {
+                                                        document.querySelector('.main-content').scrollIntoView({
+                                                                behavior: 'smooth'
+                                                                    });
+                                                                    });
+
+                                                                    // Admin panel
+                                                                    adminBtn.addEventListener('click', () => {
+                                                                        renderAdminList();
+                                                                            openModal('admin-modal');
+                                                                            });
+
+                                                                            // Render admin list
+                                                                            function renderAdminList() {
+                                                                                const listContainer = document.getElementById('admin-product-list');
+                                                                                    listContainer.innerHTML = '';
+
+                                                                                        products.forEach(product => {
+                                                                                                const item = document.createElement('div');
+                                                                                                        item.className = 'admin-item';
+
+                                                                                                                item.innerHTML = `
+                                                                                                                            <span class="admin-item-title">${product.title}</span>
+                                                                                                                                        <button class="btn-delete" onclick="deleteProduct(${product.id})">Delete</button>
+                                                                                                                                                `;
+
+                                                                                                                                                        listContainer.appendChild(item);
+                                                                                                                                                            });
+                                                                                                                                                            }
+
+                                                                                                                                                            // Add product
+                                                                                                                                                            document.getElementById('add-product-form').addEventListener('submit', function(e) {
+                                                                                                                                                                e.preventDefault();
+
+                                                                                                                                                                    const newProduct = {
+                                                                                                                                                                            id: Date.now(),
+                                                                                                                                                                                    title: document.getElementById('add-title').value,
+                                                                                                                                                                                            price: document.getElementById('add-price').value,
+                                                                                                                                                                                                    thumbnail: document.getElementById('add-thumbnail').value,
+                                                                                                                                                                                                            fileURL: document.getElementById('add-file').value,
+                                                                                                                                                                                                                    description: document.getElementById('add-desc').value
+                                                                                                                                                                                                                        };
+
+                                                                                                                                                                                                                            products.push(newProduct);
+                                                                                                                                                                                                                                localStorage.setItem('rivonStoreProducts', JSON.stringify(products));
+
+                                                                                                                                                                                                                                    renderProducts(products);
+                                                                                                                                                                                                                                        renderAdminList();
+                                                                                                                                                                                                                                            this.reset();
+
+                                                                                                                                                                                                                                                showToast("Product added successfully!");
+                                                                                                                                                                                                                                                });
+
+                                                                                                                                                                                                                                                // Delete product
+                                                                                                                                                                                                                                                function deleteProduct(id) {
+                                                                                                                                                                                                                                                    products = products.filter(p => p.id !== id);
+
+                                                                                                                                                                                                                                                        localStorage.setItem('rivonStoreProducts', JSON.stringify(products));
+
+                                                                                                                                                                                                                                                            renderProducts(products);
+                                                                                                                                                                                                                                                                renderAdminList();
+
+                                                                                                                                                                                                                                                                    showToast("Product deleted");
+                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                    // Initial load
+                                                                                                                                                                                                                                                                    window.addEventListener('load', () => {
+
+                                                                                                                                                                                                                                                                        renderProducts(products);
+
+                                                                                                                                                                                                                                                                            setTimeout(() => {
+                                                                                                                                                                                                                                                                                    loader.style.opacity = "0";
+
+                                                                                                                                                                                                                                                                                            setTimeout(() => {
+                                                                                                                                                                                                                                                                                                        loader.style.display = "none";
+                                                                                                                                                                                                                                                                                                                }, 400);
+
+                                                                                                                                                                                                                                                                                                                    }, 500);
+
+                                                                                                                                                                                                                                                                                                                    });
