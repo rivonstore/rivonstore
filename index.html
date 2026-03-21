@@ -1,120 +1,263 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>RivonStore | Digital Products</title>  
-    <link rel="stylesheet" href="style.css">  
-</head>  
-<body>  
-  
-    <!-- Loading Animation -->  
-    <div id="loader" class="loader-overlay">  
-        <div class="spinner"></div>  
-    </div>  
-  
-    <!-- Navigation Bar -->  
-    <nav class="navbar">  
-        <div class="nav-container">  
-            <div class="logo">RivonStore</div>  
-            <div class="search-container">  
-                <input type="text" id="search-input" placeholder="Search products...">  
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>  
-            </div>  
-            <button id="admin-btn" class="btn-outline">Admin Panel</button>  
-        </div>  
-    </nav>  
-  
-    <!-- Hero Section -->  
-    <header class="hero">  
-        <div class="hero-content">  
-            <h1>Premium Digital Assets</h1>  
-            <p>Elevate your digital life with our curated sticker packs, photos, and high-res wallpapers.</p>  
-            <button id="explore-btn" class="btn-primary">Explore Products</button>  
-        </div>  
-    </header>  
-  
-    <!-- Product Grid Section -->  
-    <main class="main-content">  
-        <div class="section-header">  
-            <h2>Trending Products</h2>  
-        </div>  
-        <div id="product-grid" class="product-grid">  
-            <!-- Products will be injected here via JavaScript -->  
-        </div>  
-    </main>  
-  
-    <!-- Product View & Buy Modal -->  
-    <div id="buy-modal" class="modal-overlay">  
-        <div class="modal-content buy-modal-content">  
-            <span class="close-btn" onclick="closeModal('buy-modal')">&times;</span>  
-            <div class="modal-grid">  
-                <div class="modal-image-container">  
-                    <img id="modal-img" src="" alt="Product">  
-                </div>  
-                <div class="modal-details">  
-                    <h2 id="modal-title">Product Title</h2>  
-                    <h3 id="modal-price" class="price-tag">₹0</h3>  
-                    <p id="modal-desc" class="desc-text">Product description goes here.</p>  
-                      
-                    <div class="upi-instructions">  
-                        <h4>Payment Instructions</h4>  
-                        <p>1. Scan the QR code or send payment to UPI ID:</p>  
-                        <div class="upi-id-box">yourname@upi</div>  
-                        <p>2. Amount to pay: <strong id="modal-pay-amount">₹0</strong></p>  
-                        <div class="qr-box">  
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=yourname@upi" alt="UPI QR Code">  
-                        </div>  
-                    </div>  
-  
-                    <div class="form-container">  
-                        <h4>Submit Payment Screenshot</h4>  
-                        <form action="https://formspree.io/f/mvoeqkpj" method="POST" enctype="multipart/form-data">  
-                            <input type="text" name="Name" placeholder="Your Full Name" required>  
-                            <input type="email" name="Email" placeholder="Your Email Address" required>  
-                            <input type="text" id="form-product-name" name="Product_Name" readonly required>  
-                            <label for="screenshot">Upload Payment Screenshot:</label>  
-                            <input type="file" id="screenshot" name="Screenshot" accept="image/*" required>  
-                            <button type="submit" class="btn-primary full-width">Submit Payment & Get Product</button>  
-                        </form>  
-                    </div>  
-                </div>  
-            </div>  
-        </div>  
-    </div>  
-  
-    <!-- Admin Panel Modal -->  
-    <div id="admin-modal" class="modal-overlay">  
-        <div class="modal-content admin-modal-content">  
-            <span class="close-btn" onclick="closeModal('admin-modal')">&times;</span>  
-            <h2>Admin Panel</h2>  
-              
-            <div class="admin-tabs">  
-                <div class="admin-form-container">  
-                    <h3>Add New Product</h3>  
-                    <form id="add-product-form">  
-                        <input type="text" id="add-title" placeholder="Product Title" required>  
-                        <input type="number" id="add-price" placeholder="Product Price (₹)" required>  
-                        <input type="url" id="add-thumbnail" placeholder="Thumbnail Image URL (Cloudinary)" required>  
-                        <input type="url" id="add-file" placeholder="Product File Download URL" required>  
-                        <textarea id="add-desc" rows="3" placeholder="Product Description" required></textarea>  
-                        <button type="submit" class="btn-primary">Add Product</button>  
-                    </form>  
-                </div>  
-                  
-                <div class="admin-list-container">  
-                    <h3>Manage Products</h3>  
-                    <div id="admin-product-list" class="admin-product-list">  
-                        <!-- Admin products injected here -->  
-                    </div>  
-                </div>  
-            </div>  
-        </div>  
-    </div>  
-  
-    <!-- Toast Notifications Container -->  
-    <div id="toast-container" class="toast-container"></div>  
-  
-    <script src="script.js"></script>  
-</body>  
-</html>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rivonstore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+    <!-- Main Content Area -->
+    <main id="main-content">
+        
+        <!-- 1. HOME SCREEN -->
+        <section id="screen-home" class="screen active">
+            <header class="app-header">
+                <div class="logo-area" onclick="handleLogoClick()">Rivonstore</div>
+                <div class="search-bar">
+                    <span class="search-icon">
+    <ion-icon name="search-outline"></ion-icon>
+                  </span>
+                    <input type="text" id="home-search" placeholder="Search stickers, posters...">
+                </div>
+            </header>
+
+            <div class="home-content">
+                <!-- Stickers Section -->
+                <div id="home-stickers" class="section-title">Trending Stickers</div>
+                <div id="home-stickers-container" class="rows-container"></div>
+
+                <!-- Posters Section -->
+                <div id="home-posters" class="section-title">Premium Posters</div>
+                <div id="home-posters-container" class="rows-container"></div>
+            </div>
+        </section>
+
+        <!-- 2. CATEGORY PAGE -->
+        <section id="screen-category" class="screen">
+            <header class="page-header">
+                <button class="icon-btn" onclick="navigate('home')">❮</button>
+                <h2 id="category-page-title">Category</h2>
+                <div style="width: 24px;"></div>
+            </header>
+            <div class="search-bar inline-search">
+                <span class="search-icon">
+    <ion-icon name="search-outline"></ion-icon>
+              </span>
+                <input type="text" id="category-search" placeholder="Search in category...">
+            </div>
+            <div id="category-grid" class="product-grid"></div>
+        </section>
+
+        <!-- 3. PRODUCT DETAIL PAGE -->
+        <section id="screen-product" class="screen">
+            <header class="page-header transparent">
+                <button class="icon-btn dark" onclick="goBackFromProduct()">❮</button>
+            </header>
+            <div class="product-media">
+    <div class="product-slider" id="product-slider">
+        <img id="detail-thumb" src="" alt="Thumbnail">
+        <img id="detail-preview" src="" alt="Collage Preview">
+    </div>
+
+    <div class="slider-line-wrap">
+        <div class="slider-line-track">
+            <div class="slider-line-indicator" id="slider-line-indicator"></div>
+        </div>
+    </div>
+          </div>
+            <div class="product-info">
+                <h1 id="detail-title">Title</h1>
+                <p id="detail-price" class="price">₹0</p>
+                <div class="detail-description">
+                    <h3>Description</h3>
+                    <p id="detail-desc">Description text goes here.</p>
+                </div>
+            </div>
+            <div class="fixed-bottom-bar">
+                <button id="btn-add-to-cart" class="btn-primary full-width" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </section>
+
+        <!-- 4. MY CART SCREEN -->
+        <section id="screen-cart" class="screen">
+            <header class="page-header">
+                <h2>My Cart</h2>
+            </header>
+            <div id="cart-content" class="cart-container">
+                <div id="cart-list"></div>
+                
+                <div id="cart-summary" class="cart-summary">
+                    <div class="summary-row">
+                        <span>Items Total</span>
+                        <span id="cart-items-total">₹0</span>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>Total Amount</span>
+                        <span id="cart-final-total">₹0</span>
+                    </div>
+                    <button class="btn-primary full-width mt-10" onclick="navigate('payment-method')">Choose Payment Method</button>
+                </div>
+            </div>
+
+            <div id="empty-cart" class="empty-state hidden">
+                <div class="empty-icon">🛒</div>
+                <h3>Your cart is empty</h3>
+                <p>Looks like you haven't added anything yet.</p>
+                <button class="btn-primary mt-10" onclick="navigate('home')">Explore Products</button>
+            </div>
+        </section>
+
+        <!-- 5. PAYMENT METHOD SCREEN -->
+        <section id="screen-payment-method" class="screen">
+            <header class="page-header">
+                <button class="icon-btn" onclick="navigate('cart')">❮</button>
+                <h2>Payment Method</h2>
+                <div style="width: 24px;"></div>
+            </header>
+            <div class="payment-methods">
+                <button class="payment-card" onclick="selectPayment('Google Pay')">
+                    <span class="pay-icon">G</span> Google Pay
+                </button>
+                <button class="payment-card" onclick="selectPayment('PhonePe')">
+                    <span class="pay-icon">P</span> PhonePe
+                </button>
+                <button class="payment-card" onclick="selectPayment('Paytm')">
+                    <span class="pay-icon">T</span> Paytm
+                </button>
+                <button class="payment-card" onclick="selectPayment('Amazon Pay')">
+                    <span class="pay-icon">A</span> Amazon Pay
+                </button>
+            </div>
+        </section>
+
+        <!-- 6. PAYMENT ACTION SCREEN -->
+        <section id="screen-payment-action" class="screen">
+            <header class="page-header">
+                <button class="icon-btn" onclick="navigate('payment-method')">❮</button>
+                <h2>Complete Payment</h2>
+                <div style="width: 24px;"></div>
+            </header>
+            <div class="payment-action-card">
+                <h3 id="pay-action-method">App</h3>
+                <h1 id="pay-action-amount" class="pay-amount">₹0</h1>
+                <p class="pay-instruction">Click proceed to open your UPI app and complete the payment. Then return here and click "I Paid".</p>
+              <p class="pay-upi-id">UPI ID: <span id="display-upi-id"></span></p>
+                
+                <button class="btn-primary full-width mt-20" onclick="proceedPayment()">Proceed Payment</button>
+                <button id="btn-i-paid" class="btn-outline full-width mt-10 disabled" onclick="confirmIPaid()">I Paid</button>
+            </div>
+        </section>
+
+        <!-- 7. VERIFICATION SCREEN -->
+        <section id="screen-verification" class="screen">
+            <div class="center-content">
+                <div class="loader"></div>
+                <h3 class="mt-20">Verifying payment...</h3>
+                <p>Please wait, do not close the app.</p>
+            </div>
+        </section>
+
+        <!-- 8. SUCCESS SCREEN -->
+        <section id="screen-success" class="screen">
+            <div class="center-content">
+                <div class="success-icon">✓</div>
+                <h2 class="mt-10">Payment Successful</h2>
+                <p class="timer-text">Auto redirecting in <span id="success-timer">60</span>s</p>
+                
+                <div class="download-section mt-20">
+                    <h3>Your Downloads</h3>
+                    <div id="download-links-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. ADMIN LOGIN -->
+        <section id="screen-admin-login" class="screen">
+            <header class="page-header">
+                <button class="icon-btn" onclick="navigate('home')">❮</button>
+                <h2>Admin Login</h2>
+                <div style="width: 24px;"></div>
+            </header>
+            <div class="admin-form">
+                <input type="password" id="admin-pass" class="input-field" placeholder="Enter Admin Password">
+                <button class="btn-primary full-width mt-10" onclick="verifyAdmin()">Login</button>
+            </div>
+        </section>
+
+        <!-- 10. ADMIN DASHBOARD -->
+        <section id="screen-admin-dashboard" class="screen">
+            <header class="page-header">
+                <button class="icon-btn" onclick="navigate('home')">❮</button>
+                <h2>Admin Dashboard</h2>
+                <button class="icon-btn text-sm" onclick="logoutAdmin()">Logout</button>
+            </header>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('add')">Add Product</button>
+                <button class="admin-tab" onclick="switchAdminTab('manage')">Manage</button>
+            </div>
+
+            <div id="admin-add-section" class="admin-pane active">
+                <div class="admin-form">
+                    <input type="text" id="prod-title" class="input-field" placeholder="Product Title" required>
+                    <input type="number" id="prod-price" class="input-field" placeholder="Price (₹)" required>
+                    <textarea id="prod-desc" class="input-field" placeholder="Description" rows="3" required></textarea>
+                    
+                    <select id="prod-category" class="input-field">
+                        <option value="stickers">Stickers</option>
+                        <option value="posters">Posters</option>
+                    </select>
+
+                    <label class="file-label">Thumbnail Image</label>
+                    <input type="file" id="prod-thumb" class="input-field" accept="image/*" required>
+
+                    <label class="file-label">Preview Collage Image</label>
+                    <input type="file" id="prod-preview" class="input-field" accept="image/*" required>
+
+                    <label class="file-label">Product ZIP File</label>
+                    <input type="file" id="prod-file" class="input-field" accept=".zip" required>
+
+                    <button class="btn-primary full-width mt-10" onclick="uploadProduct()">Upload Product</button>
+                </div>
+            </div>
+
+            <div id="admin-manage-section" class="admin-pane hidden">
+                <div id="admin-product-list" class="admin-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav id="bottom-nav" class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="navigate('home')">
+        <span class="nav-icon">
+            <ion-icon name="home-outline"></ion-icon>
+        </span>
+        <span>Home</span>
+    </button>
+
+    <button class="nav-item" id="nav-cart" onclick="navigate('cart')">
+        <span class="nav-icon badge-container">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span id="cart-badge" class="badge">0</span>
+        </span>
+        <span>My Cart</span>
+    </button>
+  </nav>
+
+    <!-- TOAST & OVERLAYS -->
+    <div id="toast-container"></div>
+    <div id="global-loader" class="overlay hidden">
+        <div class="loader"></div>
+        <p id="loader-text" class="mt-10 text-white">Uploading...</p>
+    </div>
+</div>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<script src="script.js"></script>
+</body>
+</html>
